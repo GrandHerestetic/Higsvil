@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Button } from "../../components/button";
 import { useAuth } from "../../context/AuthContext";
-import { createProject, generateThumbnail, uploadImageToStorage } from "../../services/projectService";
+import { createProject, generateThumbnailFromFrame, uploadImageToStorage } from "../../services/projectService";
 import { useNavigate } from "react-router-dom";
 import Input from "../../components/input";
 
@@ -292,11 +292,11 @@ export default function VideoEditor() {
                 { type: 'video/mp4' }
             );
 
-            // Шаг 3: Генерация миниатюры
+            // Шаг 3: Генерация миниатюры из первого кадра раскадровки
             let thumbnailBlob: Blob | undefined;
-            if (videoRef.current) {
-                console.log('🖼️ Генерация миниатюры...');
-                thumbnailBlob = await generateThumbnail(videoRef.current);
+            if (storyboardFrames.length > 0) {
+                console.log('🖼️ Генерация миниатюры из первого кадра...');
+                thumbnailBlob = await generateThumbnailFromFrame(storyboardFrames[0]);
             }
 
             // Шаг 4: Форматирование длительности

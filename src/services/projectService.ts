@@ -275,3 +275,45 @@ export const uploadImageToStorage = async (
   }
 };
 
+// Генерация миниатюры из кадра раскадровки (base64)
+export const generateThumbnailFromFrame = (frameBase64: string): Promise<Blob> => {
+  return new Promise((resolve, reject) => {
+    try {
+      const canvas = document.createElement('canvas');
+      canvas.width = 400;
+      canvas.height = 225;
+
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
+        reject(new Error('Не удалось получить контекст canvas'));
+        return;
+      }
+
+      const img = new Image();
+      img.onload = () => {
+        try {
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          
+          canvas.toBlob((blob) => {
+            if (blob) {
+              resolve(blob);
+            } else {
+              reject(new Error('Не удалось создать миниатюру из кадра'));
+            }
+          }, 'image/jpeg', 0.8);
+        } catch (error) {
+          reject(error);
+        }
+      };
+      
+      img.onerror = () => {
+        reject(new Error('Не удалось загрузить изображение кадра'));
+      };
+      
+      img.src = frameBase64;
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+

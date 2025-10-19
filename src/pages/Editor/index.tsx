@@ -126,7 +126,7 @@ export default function VideoEditor() {
         setIsGeneratingStoryboard(true);
         
         try {
-            const apiUrl = import.meta.env.VITE_API_URL || 'https://ffmpeg-production-2a8b.up.railway.app';
+            const apiUrl = import.meta.env.VITE_API_URL || 'https://cors-anywhere.herokuapp.com/https://ffmpeg-production-2a8b.up.railway.app';
             console.log(`📤 Отправка видео на API: ${apiUrl}/api/storyboard/extract-frames`);
             console.log(`📦 Размер файла: ${(videoFile.size / 1024 / 1024).toFixed(2)} MB`);
                         
@@ -157,9 +157,9 @@ export default function VideoEditor() {
                 frames = data;
             } else {
                 throw new Error('Неверный формат ответа от API. Ожидается массив frames.');
-            }
-            
-            setStoryboardFrames(frames);
+        }
+
+        setStoryboardFrames(frames);
             console.log(`✅ Получено ${frames.length} кадров раскадровки от API`);
             
         } catch (error: any) {
@@ -168,14 +168,14 @@ export default function VideoEditor() {
             let errorMessage = 'Ошибка при генерации раскадровки.';
             
             if (error.message.includes('Failed to fetch')) {
-                errorMessage = `API недоступен. Убедитесь, что сервер запущен на ${import.meta.env.VITE_API_URL || 'https://ffmpeg-production-2a8b.up.railway.app'}`;
+                errorMessage = `API недоступен. Убедитесь, что сервер запущен на ${import.meta.env.VITE_API_URL || 'https://cors-anywhere.herokuapp.com/https://ffmpeg-production-2a8b.up.railway.app'}`;
             } else if (error.message) {
                 errorMessage = error.message;
             }
             
             alert(errorMessage);
         } finally {
-            setIsGeneratingStoryboard(false);
+        setIsGeneratingStoryboard(false);
         }
     };
 
@@ -225,7 +225,7 @@ export default function VideoEditor() {
             console.log(`📊 Всего кадров в раскадровке: ${storyboardFrames.length} (оригинал + AI вставки между выбранными кадрами)`);
             
             // Шаг 1: Генерируем финальное видео из ВСЕЙ раскадровки (оригинал + AI кадры между выбранными)
-            const apiUrl = import.meta.env.VITE_API_URL || 'https://ffmpeg-production-2a8b.up.railway.app';
+            const apiUrl = import.meta.env.VITE_API_URL || 'https://cors-anywhere.herokuapp.com/https://ffmpeg-production-2a8b.up.railway.app';
             
             const requestData = {
                 frames: storyboardFrames,  // ВСЕ кадры (оригинал + AI вставки)
@@ -364,7 +364,7 @@ export default function VideoEditor() {
                 throw new Error('Пользователь не авторизован');
             }
 
-            const apiUrl = import.meta.env.VITE_API_URL || 'https://ffmpeg-production-2a8b.up.railway.app';
+            const apiUrl = import.meta.env.VITE_API_URL || 'https://cors-anywhere.herokuapp.com/https://ffmpeg-production-2a8b.up.railway.app';
             console.log('🎬 Генерация AI видео...');
             console.log(`💬 Промпт: ${text}`);
             
@@ -558,7 +558,7 @@ export default function VideoEditor() {
             let errorMessage = 'Ошибка при генерации видео.';
             
             if (error.message.includes('Failed to fetch')) {
-                errorMessage = `API недоступен. Убедитесь, что сервер запущен на ${import.meta.env.VITE_API_URL || 'https://ffmpeg-production-2a8b.up.railway.app'}`;
+                errorMessage = `API недоступен. Убедитесь, что сервер запущен на ${import.meta.env.VITE_API_URL || 'https://cors-anywhere.herokuapp.com/https://ffmpeg-production-2a8b.up.railway.app'}`;
             } else if (error.message.includes('ffmpeg')) {
                 errorMessage = 
                     '⚠️ FFmpeg не смог обработать кадры\n\n' +
@@ -786,17 +786,17 @@ export default function VideoEditor() {
                                                 const selectionOrder = selectedFrames.indexOf(index);
                                                 
                                                 return (
-                                                    <div
-                                                        key={index}
-                                                        className="flex-shrink-0 relative group cursor-pointer h-full"
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
+                                                <div
+                                                    key={index}
+                                                    className="flex-shrink-0 relative group cursor-pointer h-full"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
                                                             handleStoryboardClick(index, e);
-                                                        }}
-                                                    >
-                                                        <img
-                                                            src={frame}
-                                                            alt={`Frame ${index + 1}`}
+                                                    }}
+                                                >
+                                                    <img
+                                                        src={frame}
+                                                        alt={`Frame ${index + 1}`}
                                                             className={`w-16 h-full object-cover rounded border-2 transition-colors ${
                                                                 isSelected 
                                                                     ? 'border-yellow-400 shadow-lg' 
@@ -804,8 +804,8 @@ export default function VideoEditor() {
                                                                     ? 'border-custom-lime shadow-lg'
                                                                     : 'border-gray-300 hover:border-custom-lime'
                                                             }`}
-                                                        />
-                                                        <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-70 text-white text-xs text-center py-0.5 rounded-b">
+                                                    />
+                                                    <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-70 text-white text-xs text-center py-0.5 rounded-b">
                                                             {index + 1}
                                                         </div>
                                                         {/* Индикация AI кадров */}

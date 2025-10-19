@@ -1,6 +1,6 @@
 import { type ReactNode } from 'react'
 import { useAuth } from '../context/AuthContext'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import logo from '../assets/icon.avif'
 
 interface LayoutProps {
@@ -8,7 +8,7 @@ interface LayoutProps {
 }
 
 export const Layout = ({ children }: LayoutProps) => {
-    const { isAuthenticated, logout, user } = useAuth()
+    const { isAuthenticated, logout, } = useAuth()
     const location = useLocation()
     const isLoginPage = location.pathname === '/login'
     const navigate = useNavigate()

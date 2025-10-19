@@ -126,7 +126,7 @@ export default function VideoEditor() {
         setIsGeneratingStoryboard(true);
         
         try {
-            const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+            const apiUrl = import.meta.env.VITE_API_URL || 'https://ffmpeg-production-2a8b.up.railway.app';
             console.log(`📤 Отправка видео на API: ${apiUrl}/api/storyboard/extract-frames`);
             console.log(`📦 Размер файла: ${(videoFile.size / 1024 / 1024).toFixed(2)} MB`);
                         
@@ -168,7 +168,7 @@ export default function VideoEditor() {
             let errorMessage = 'Ошибка при генерации раскадровки.';
             
             if (error.message.includes('Failed to fetch')) {
-                errorMessage = `API недоступен. Убедитесь, что сервер запущен на ${import.meta.env.VITE_API_URL || 'http://localhost:3000'}`;
+                errorMessage = `API недоступен. Убедитесь, что сервер запущен на ${import.meta.env.VITE_API_URL || 'https://ffmpeg-production-2a8b.up.railway.app'}`;
             } else if (error.message) {
                 errorMessage = error.message;
             }
@@ -225,7 +225,7 @@ export default function VideoEditor() {
             console.log(`📊 Всего кадров в раскадровке: ${storyboardFrames.length} (оригинал + AI вставки между выбранными кадрами)`);
             
             // Шаг 1: Генерируем финальное видео из ВСЕЙ раскадровки (оригинал + AI кадры между выбранными)
-            const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+            const apiUrl = import.meta.env.VITE_API_URL || 'https://ffmpeg-production-2a8b.up.railway.app';
             
             const requestData = {
                 frames: storyboardFrames,  // ВСЕ кадры (оригинал + AI вставки)
@@ -347,7 +347,7 @@ export default function VideoEditor() {
                 throw new Error('Пользователь не авторизован');
             }
 
-            const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+            const apiUrl = import.meta.env.VITE_API_URL || 'https://ffmpeg-production-2a8b.up.railway.app';
             console.log('🎬 Генерация AI видео...');
             console.log(`💬 Промпт: ${text}`);
             
@@ -527,7 +527,7 @@ export default function VideoEditor() {
             let errorMessage = 'Ошибка при генерации видео.';
             
             if (error.message.includes('Failed to fetch')) {
-                errorMessage = `API недоступен. Убедитесь, что сервер запущен на ${import.meta.env.VITE_API_URL || 'http://localhost:3000'}`;
+                errorMessage = `API недоступен. Убедитесь, что сервер запущен на ${import.meta.env.VITE_API_URL || 'https://ffmpeg-production-2a8b.up.railway.app'}`;
             } else if (error.message.includes('ffmpeg')) {
                 errorMessage = 
                     '⚠️ FFmpeg не смог обработать кадры\n\n' +

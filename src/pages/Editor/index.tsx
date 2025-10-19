@@ -157,9 +157,9 @@ export default function VideoEditor() {
                 frames = data;
             } else {
                 throw new Error('Неверный формат ответа от API. Ожидается массив frames.');
-        }
-
-        setStoryboardFrames(frames);
+            }
+            
+            setStoryboardFrames(frames);
             console.log(`✅ Получено ${frames.length} кадров раскадровки от API`);
             
         } catch (error: any) {
@@ -175,7 +175,7 @@ export default function VideoEditor() {
             
             alert(errorMessage);
         } finally {
-        setIsGeneratingStoryboard(false);
+            setIsGeneratingStoryboard(false);
         }
     };
 
@@ -256,9 +256,26 @@ export default function VideoEditor() {
             
             if (contentType && contentType.includes('application/json')) {
                 const data = await response.json();
+                console.log('📥 Ответ от API:', data);
+                
                 if (data.videoUrl) {
-                    const videoResponse = await fetch(data.videoUrl);
+                    console.log('🎬 Загружаем видео по URL:', data.videoUrl);
+                    
+                    // Проверяем, нужно ли добавить базовый URL
+                    let videoUrl = data.videoUrl;
+                    if (videoUrl.startsWith('/')) {
+                        videoUrl = `${apiUrl}${videoUrl}`;
+                    }
+                    
+                    console.log('🔗 Полный URL видео:', videoUrl);
+                    
+                    const videoResponse = await fetch(videoUrl);
+                    if (!videoResponse.ok) {
+                        throw new Error(`Не удалось загрузить видео: ${videoResponse.status} ${videoResponse.statusText}`);
+                    }
+                    
                     videoBlob = await videoResponse.blob();
+                    console.log('✅ Видео загружено как blob:', videoBlob.size, 'bytes');
                 } else {
                     throw new Error('API не вернул URL видео');
                 }
@@ -472,8 +489,22 @@ export default function VideoEditor() {
             // Обновляем основное видео в плеере с новой раскадровкой
             if (data.videoUrl) {
                 console.log('📥 Обновление видео в плеере с новой раскадровкой...');
-                const videoResponse = await fetch(data.videoUrl);
+                
+                // Проверяем, нужно ли добавить базовый URL
+                let videoUrl = data.videoUrl;
+                if (videoUrl.startsWith('/')) {
+                    videoUrl = `${apiUrl}${videoUrl}`;
+                }
+                
+                console.log('🔗 Полный URL видео:', videoUrl);
+                
+                const videoResponse = await fetch(videoUrl);
+                if (!videoResponse.ok) {
+                    throw new Error(`Не удалось загрузить видео: ${videoResponse.status} ${videoResponse.statusText}`);
+                }
+                
                 const blob = await videoResponse.blob();
+                console.log('✅ Видео загружено:', blob.size, 'bytes');
                 
                 // Создаем новый URL для видео
                 const newVideoUrl = window.URL.createObjectURL(blob);
@@ -755,17 +786,17 @@ export default function VideoEditor() {
                                                 const selectionOrder = selectedFrames.indexOf(index);
                                                 
                                                 return (
-                                                <div
-                                                    key={index}
-                                                    className="flex-shrink-0 relative group cursor-pointer h-full"
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
+                                                    <div
+                                                        key={index}
+                                                        className="flex-shrink-0 relative group cursor-pointer h-full"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
                                                             handleStoryboardClick(index, e);
-                                                    }}
-                                                >
-                                                    <img
-                                                        src={frame}
-                                                        alt={`Frame ${index + 1}`}
+                                                        }}
+                                                    >
+                                                        <img
+                                                            src={frame}
+                                                            alt={`Frame ${index + 1}`}
                                                             className={`w-16 h-full object-cover rounded border-2 transition-colors ${
                                                                 isSelected 
                                                                     ? 'border-yellow-400 shadow-lg' 
@@ -773,8 +804,8 @@ export default function VideoEditor() {
                                                                     ? 'border-custom-lime shadow-lg'
                                                                     : 'border-gray-300 hover:border-custom-lime'
                                                             }`}
-                                                    />
-                                                    <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-70 text-white text-xs text-center py-0.5 rounded-b">
+                                                        />
+                                                        <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-70 text-white text-xs text-center py-0.5 rounded-b">
                                                             {index + 1}
                                                         </div>
                                                         {/* Индикация AI кадров */}
